@@ -46,6 +46,45 @@ func readWithNewAllocation(fileName string) error {
 
 }
 
+//-----------------------------------------------------------
+// APPROACH 2: Reuse one slice as a buffer
+// -----------------------------------------------------------
+
+func readWithReusedBuffer(fileName string) error {
+	// Open the file
+	file, err := os.Open(fileName)
+	if err != nil {
+		return err
+	}
+	// Ensure the file is closed when the function returns
+	defer file.Close()
+
+	fmt.Println("\n========== APPROACH 2 ==========")
+	fmt.Println("Reusing one slice as a buffer")
+
+	// Allocate one slice before entering the loop.
+	data := make([]byte, 100) // 100 bytes buffer
+
+	for {
+
+		// resuse the same underlying array for every read
+		count, err := file.Read(data)
+
+		// Process only the bytes actually read
+		if count > 0 {
+			// process function called here
+			process(data[:count])
+		}
+
+		if err != nil {
+			if errors.Is(err, io.EOF) {
+				return nil // End of file reached, exit the loop
+			}
+			return err // Return any other error
+		}
+	}
+}
+
 // -----------------------------------------------------------
 // PROCESS FUNCTION
 // -----------------------------------------------------------
@@ -66,6 +105,14 @@ func main() {
 
 	// First approach
 	err := readWithNewAllocation(fileName)
+
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	// Second approach
+	err = readWithReusedBuffer(fileName)
 
 	if err != nil {
 		fmt.Println("Error:", err)
