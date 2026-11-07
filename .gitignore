@@ -1,0 +1,10 @@
+.env
+*.env.local
+/bin/
+*.exe
+*.test
+vendor/
+.idea/
+.vscode/
+*.swp
+.DS_Store
