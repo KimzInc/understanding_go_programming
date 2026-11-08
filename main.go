@@ -7,6 +7,34 @@ import (
 	"os"
 )
 
+type Person struct {
+	FirstName string
+	LastName  string
+	Age       int
+}
+
+// -----------------------------------------------------------
+// Function MakePerson creates a new Person instance and returns Person by value
+
+func MakePerson(firstName, lastName string, age int) Person {
+	return Person{
+		FirstName: firstName,
+		LastName:  lastName,
+		Age:       age,
+	}
+}
+
+// -----------------------------------------------------------
+// Function MakePersonPtr creates a new Person instance and returns a pointer to Person
+
+func MakePersonPtr(firstName, lastName string, age int) *Person {
+	return &Person{
+		FirstName: firstName,
+		LastName:  lastName,
+		Age:       age,
+	}
+}
+
 // -----------------------------------------------------------
 // APPROACH 1: Allocate a new slice for every read
 // -----------------------------------------------------------
@@ -118,4 +146,14 @@ func main() {
 		fmt.Println("Error:", err)
 		return
 	}
+
+	fmt.Println("\n========== Demonstrating MakePerson and MakePersonPtr ==========")
+
+	// Demonstrate the use of MakePerson and MakePersonPtr
+	person1 := MakePerson("John", "Doe", 30)
+	fmt.Printf("\nPerson by value: %+v\n", person1)
+
+	person2 := MakePersonPtr("Jane", "Smith", 25)
+	fmt.Printf("Person by pointer: %+v\n", *person2)
+
 }
